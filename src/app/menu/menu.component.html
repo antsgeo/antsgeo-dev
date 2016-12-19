@@ -1,0 +1,248 @@
+<!-- Main nemu -->
+<div class="ui stackable container menu" id="menu" >
+    <a class="item" (click)="modalAddTag(true)" [class.disabled]="flagsForNotification.failedGetMarkers.forButton">
+        {{translateLibrary.modalTag.title}}
+      </a>
+    <a class="item" (click)="modalHelp()">
+        {{translateLibrary.modalHelp.title}}
+      </a>
+    <a class="item" (click)="modalContact()">
+        {{translateLibrary.modalContact.title}}
+      </a>
+    <a class="item" (click)="modalAbout()">
+        {{translateLibrary.modalAbout.title}}
+      </a>
+    <div class="menu">
+        <div class="item">
+            <select class="ui small selection dropdown custon_dropdown" #lang (change)="changeLang(lang.value)">
+              <option value="en" selected><i class="gb flag"></i> English</option>
+              <option value="ru" ><i class="ru flag"></i> Россия</option>
+            </select>
+        </div>
+    </div>
+    <div class="right menu">
+        <div class="item">
+            <div class="ui icon input custom_input">
+                <input type="text" placeholder="{{translateLibrary.placeholder}}" [(ngModel)]="argumentForFilter" (ngModelChange)="sendDataToFilter($event)">
+                <i class="search link icon"></i>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Main nemu -->
+
+<!-- Sidebar menu -->
+<div class="ui sidebar stackable container menu custom_sidebar">
+    <a class="item sidebar_item" (click)="modalAddTag(true)" [class.disabled]="flagsForNotification.failedGetMarkers.forButton">
+        {{translateLibrary.modalTag.title}}
+    </a>
+    <a class="item sidebar_item" (click)="modalHelp()">
+        {{translateLibrary.modalHelp.title}}
+    </a>
+    <a class="item sidebar_item" (click)="modalContact()">
+        {{translateLibrary.modalContact.title}}
+    </a>
+    <a class="item sidebar_item" (click)="modalAbout()">
+        {{translateLibrary.modalAbout.title}}
+    </a>
+    <div class="menu">
+        <div class="item">
+            <select class="ui small selection dropdown custon_dropdown" #langMobile (change)="changeLang(langMobile.value)">
+              <option value="en" selected><i class="gb flag"></i> English</option>
+              <option value="ru" ><i class="ru flag"></i> Россия</option>
+            </select>
+        </div>
+    </div>
+</div>
+<!-- Sidebar menu -->
+
+<!-- Mobile main menu -->
+<div class="ui container menu custom_menu-mobile">
+    <a class="item" (click)="openSidebar()">
+        <i class="sidebar icon custom_sidebar-icon"></i>
+    </a>
+    <div class="right menu">
+        <div class="item">
+            <div class="ui icon input custom_input">
+                <input type="text" placeholder="Search..." [(ngModel)]="argumentForFilter" (ngModelChange)="sendDataToFilter($event)">
+                <i class="search link icon"></i>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Mobile main menu -->
+
+<!-- Message for failed get markers -->
+<div class="ui container custom_message" [@fadeInOut] *ngIf="flagsForNotification.failedGetMarkers.forClose">
+  <div class="ui small icon negative message">
+    <i class="close icon" (click)="flagsForNotification.failedGetMarkers.forClose = false"></i>
+    <i class="Setting notched loading icon"></i>
+    <div class="content">
+      <div class="header">
+        {{translateLibrary.errorGetMarkersWindow.title}}
+      </div>
+      <p>{{translateLibrary.errorGetMarkersWindow.text}}</p>
+    </div>
+  </div>
+</div>
+<!-- Message for failed get markers -->
+
+<!-- Message, marker is added! -->
+<div class="ui container custom_message test_mes" [@scale] *ngIf="flagsForNotification.successAddedMarker">
+  <div class="ui small icon green positive message">
+    <i class="close icon" (click)="closeMessage(flagsForNotification.successAddedMarker = false)"></i>
+    <i class="Check Circle notched icon"></i>
+    <div class="content">
+      <div class="header">
+        {{translateLibrary.successAddMarker}}
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Message, marker is added! -->
+
+<!-- Message for addTag -->
+<div class="ui container custom_message test_mes" [@scale] *ngIf="flagsForNotification.addingMarkerOnMap">
+  <div class="ui small icon olive positive message">
+    <i class="close icon" (click)="closeMessage(flagsForNotification.addingMarkerOnMap = false)"></i>
+    <i class="Marker notched icon"></i>
+    <div class="content">
+      <div class="header">
+        {{translateLibrary.addingMarkerOnMap}}
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Message for addTag -->
+
+<!-- Form for add tag -->
+<div class="ui basic modal" id="modalAddTag">
+    <i class="close icon" (click)="modalAddTag(false)"></i>
+    <div class="header">
+        {{translateLibrary.modalTag.title}}
+    </div>
+    <div class="content">
+        <form class="ui form" id="addTagForm">
+
+            <label class="custom_label">{{translateLibrary.modalTag.set1}}</label>
+            <div class="field ui left icon input" style="width: 100%">
+                <input type="text" placeholder="{{translateLibrary.modalTag.set1}}" name="name" [(ngModel)]="data.name" (ngModelChange)="checkFormName()">
+                <i class="align left icon"></i>
+            </div>
+
+            <label class="custom_label">{{translateLibrary.modalTag.set2}}</label>
+            <div class="field ui left icon input" style="width: 100%">
+                <textarea class="custom_textarea" rows="3" placeholder="{{translateLibrary.modalTag.set2}}" name="comment" [(ngModel)]="data.comment" (ngModelChange)="checkFormComment()"></textarea>
+                <i class="align left icon textarea_icon"></i>
+            </div>
+
+            <div class="field">
+                <label>{{translateLibrary.modalTag.set3}}</label>
+                <div class="three fields">
+                    <div class="field">
+                        <input type="text" placeholder="Lat" disabled name="lat" [(ngModel)]="data.coordinateX">
+                    </div>
+                    <div class="field">
+                        <input type="text" placeholder="Lng" disabled name="lng" [(ngModel)]="data.coordinateY">
+                    </div>
+                    <div class="field">
+                        <input type="text" placeholder="Time" disabled name="date" [(ngModel)]="data.time">
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div *ngIf="checkForm.name.message" [@fadeInOut] class="ui negative icon message tiny">
+            <i class="notched Warning Sign icon"></i>
+            <div class="content">
+                <div class="header">
+                    {{translateLibrary.errorWindow.p1.title}}
+                </div>
+                <p>{{translateLibrary.errorWindow.p1.text}}</p>
+            </div>
+        </div>
+
+        <div *ngIf="checkForm.comment.message" [@fadeInOut] class="ui negative icon message tiny">
+            <i class="notched Warning Sign  icon"></i>
+            <div class="content">
+                <div class="header">
+                    {{translateLibrary.errorWindow.p2.title}}
+                </div>
+                <p>{{translateLibrary.errorWindow.p2.text}}</p>
+            </div>
+        </div>
+
+    </div>
+    <div class="actions">
+        <div class="ui cancel red basic inverted button" (click)="modalAddTag(false)"><i class="remove icon"></i>{{translateLibrary.modalTag.set4}}</div>
+        <div class="ui ok green basic inverted button" [class.disabled]="!this.checkForm.filledAll" (click)="bootstrapDataForSend(data)"><i class="checkmark icon"></i>{{translateLibrary.modalTag.set5}}</div>
+    </div>
+</div>
+<!-- Form for add tag -->
+
+<!-- Modal help -->
+<div class="ui basic modal" id="modalHelp">
+    <i class="close icon"></i>
+    <div class="header">
+        {{translateLibrary.modalHelp.title}}
+    </div>
+    <div class="content">
+        <h3> {{translateLibrary.modalHelp.p1.title}} </h3>
+        <div class="content custom_content">
+            <p [innerHTML]="translateLibrary.modalHelp.p1.text"></p>
+        </div>
+        <h3> {{translateLibrary.modalHelp.p2.title}} </h3>
+        <div class="content custom_content">
+            <p [innerHTML]="translateLibrary.modalHelp.p2.text"></p>
+        </div>
+        <h3> {{translateLibrary.modalHelp.p3.title}} </h3>
+        <div class="content custom_content">
+            <p [innerHTML]="translateLibrary.modalHelp.p3.text"></p>
+        </div>
+        <h3> {{translateLibrary.modalHelp.p4.title}} </h3>
+        <div class="content custom_content">
+            <p [innerHTML]="translateLibrary.modalHelp.p4.text"></p>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui ok green basic inverted button"><i class="checkmark icon"></i>{{translateLibrary.modalHelp.button}}</div>
+    </div>
+</div>
+<!-- Modal help -->
+
+<!-- Modal contact -->
+<div class="ui basic modal" id="modalContact">
+    <i class="close icon"></i>
+    <div class="header">
+        {{translateLibrary.modalContact.title}}
+    </div>
+    <div class="content">
+        <div class="content custom_content">
+            <p>
+                {{translateLibrary.modalContact.p1}} <a href="mailto:contact.antgeo@gmail.com">contact.antgeo@gmail.com</a>
+            </p>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui ok green basic inverted button"><i class="checkmark icon"></i>{{translateLibrary.modalContact.button}}</div>
+    </div>
+</div>
+<!-- Modal contact -->
+
+<!-- Modal about -->
+<div class="ui basic modal" id="modalAbout">
+    <i class="close icon"></i>
+    <div class="header">
+        {{translateLibrary.modalAbout.title}}
+    </div>
+    <div class="content">
+        <div class="content custom_content">
+            <p [innerHTML]="translateLibrary.modalAbout.p1">
+            </p>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui ok green basic inverted button"><i class="checkmark icon"></i>{{translateLibrary.modalAbout.button}}</div>
+    </div>
+</div>
+<!-- Modal about -->

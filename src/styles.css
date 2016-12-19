@@ -1,1 +1,386 @@
-/* You can add global styles to this file, and also import other style files */
+html, body {
+    height: auto !important;
+}
+
+#map {
+    /*height: 85%;*/
+    box-shadow: 0 1px 2px 0 rgba(34, 36, 38, .15);
+        height: 100%;
+
+}
+
+#menu {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.custon_dropdown {
+   min-width: 8em !important;
+}
+
+my-app {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+
+  -moz-flex-direction: column;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  height: 100%;
+}
+
+my-menu {
+  /*-webkit-flex:1;
+  -webkit-box-flex:1;
+  -moz-flex:1;
+  -moz-box-flex:1;
+  -ms-flex:1;
+  flex:1;*/
+  min-height: auto;
+}
+
+my-map {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex: 7;
+  flex: 7;
+
+  -moz-flex-direction: column;
+-webkit-flex-direction: column;
+flex-direction: column;
+}
+
+.custom_footer {
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  padding: 4px 0px;
+}
+
+.loader {
+  font-size: 15px !important;
+}
+
+.custom_dimmer {
+  z-index: 1500 !important;
+}
+
+/*#modalAddTag {
+  position: static!important;
+  margin: 3.5rem auto!important;
+}*/
+
+.lableClass {
+    /*background: red;*/
+    border-radius: 50%;
+    height: 6px;
+    width: 6px;
+}
+
+.labelClass_specie {
+    color: #333;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.labelClass_specie:first-letter {
+    text-transform: uppercase;
+}
+
+.labelClass_comment {
+    /*margin-left: 10px;*/
+}
+
+.labelClass_coor {
+    /*font-style: italic;*/
+    text-align: center;
+}
+
+.disabled {
+  pointer-events: none;
+   cursor: default;
+}
+
+.labelClass_time {
+  text-align: center;
+    /*font-style: italic;*/
+}
+
+.labelClass_clear {
+    clear: both;
+    margin-bottom: -10px;
+}
+
+.labelClass_hr {
+    border: 0;
+    height: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.lableClass_label {
+    white-space: nowrap;
+    display: inline;
+    position: relative;
+    top: -28px;
+    left: 21px;
+    font-size: 17px;
+    background: white;
+    padding: 1px 10px;
+    border-radius: 10px;
+    border: 1px solid #333;
+}
+
+.custom_message {
+  margin-bottom: 1em;
+}
+
+.leaflet-popup {
+  margin-bottom: 6px !important;
+  margin-left: -2px !important;
+}
+
+.custom_sidebar {
+  display: none !important;
+}
+
+.custom_menu-mobile {
+  display: none !important;
+}
+
+.custom_content {
+  font-size: 17px;
+}
+
+.dimmer {
+  overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+@media only screen and (max-width: 991px) and (min-width: 768px) {
+  .right > .item {
+        width: 177px !important;
+  }
+
+
+  .ui.menu .item {
+    padding: .92857143em .9em !important;
+  }
+}
+
+.content .message {
+  /*background: none !important;*/
+}
+
+.custom_label {
+  margin: 0 0 .28571429rem;
+  font-weight: 700;
+  font-size: .92857143em;
+  display: block;
+}
+
+.custom_textarea {
+  padding-left: 2.67142857em!important;
+}
+
+.ui.icon.input>.custom_textarea:focus~i.icon {
+  opacity: 1 !important
+}
+
+.ui.form textarea:focus > .textarea_icon  {
+   display: none !important;
+}
+
+.textarea_icon::before {
+  top: 0px !important;
+  margin-top: 14px !important;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+*::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: rgba(0,0,0,0.1);
+}
+*::-webkit-scrollbar-thumb{
+  border-radius: 10px;
+  background: rgba(255,255,255,0.8);
+}
+*::-webkit-scrollbar-thumb:hover{
+	background: rgba(255,255,255,0.9);
+}
+*::-webkit-scrollbar-thumb:active{
+	background: rgba(255,255,255,0.4);
+}
+
+.custom_sidebar-icon {
+  font-size: 1.5em !important;
+  margin: 0 auto !important;
+}
+
+.dimmer {
+  zoom: 1 !important;
+}
+
+@media only screen and (max-width: 767px) {
+
+  #menu {
+    display: none;
+  }
+
+  /*#modalAddTag {
+    -webkit-transform: none;
+    transform: none;
+  }*/
+
+  .custom_content {
+    padding-left: 0px !important;
+  }
+
+  .ui.list .list>.item>.image:only-child,
+  .ui.list .list>.item>img.image,
+  .ui.list>.item>.image:only-child,
+  .ui.list>.item>img.image {
+    width: 100% !important;
+  }
+
+  #modalHelp .actions > div {
+    width: 94% !important;
+    margin-left: 0px;
+  }
+
+  #modalAddTag .actions > div {
+    width: 100%;
+    margin-left: 0px;
+  }
+
+  #modalContact .actions > div {
+    width: 100%;
+    margin-left: 0px;
+  }
+
+  .custom_sidebar, .custom_menu-mobile {
+    display: -webkit-box !important;
+    display: -webkit-flex !important;
+    display: -ms-flexbox !important;
+    display: flex !important;
+  }
+
+  .ui.stackable.menu .item {
+    display: block !important;
+    line-height: 22px !important;
+    text-align: center;
+  }
+
+  .custom_menu-mobile {
+    margin-top: 10px !important;
+  }
+
+  html, body {
+    overflow: visible;;
+  }
+
+  .ui.selection.dropdown {
+    top: -7px !important;
+    width: 100%;
+  }
+
+  .ui.menu:not(.vertical) .item>.input {
+    top: -1px !important;
+  }
+}
+
+.labelClass_point img {
+    /*width: 32px;
+    position: absolute;
+    top: -26px;
+    left: -12px;*/
+    width: 25px;
+    position: absolute;
+    top: -30px;
+    left: -8px;
+}
+
+.leaflet-popup {
+    bottom: 24px !important;
+    left: -147px !important;
+}
+
+#addTagForm label {
+    color: white;
+}
+
+.ui.ordered.list .list > .item::before, .ui.ordered.list > .item::before, ol.ui.list li::before {
+  color: white !important;
+}
+
+.custom_content {
+    padding-left: 2em;
+}
+
+.ui.selection.dropdown>.delete.icon, .ui.selection.dropdown>.dropdown.icon, .ui.selection.dropdown>.search.icon {
+    top: .98571429em !important;
+}
+
+.ui.icon.input>i.circular.icon {
+    top: .2em !important;
+}
+
+.ui.celled.ordered.list .list>.item, .ui.celled.ordered.list>.item {
+  margin-top: 0.7rem;
+}
+
+.ui.modal>.header:not(.ui) {
+  font-size: 2rem !important;
+}
+
+.modalHelpImg {
+    width: 95%;
+    display: block;
+    text-align: center;
+    margin: 15 auto !important;
+}
+
+.lableClass_label:hover .arrow {
+    right: -28px;
+}
+
+.labelClass_copyLink {
+  width: 100%;
+}
+
+.labelClass_copyLink span {
+  text-decoration: underline;
+}
+
+.lableClass_label:hover:after {
+    box-shadow: inset 0px -5px 30px rgba(255, 255, 255, 0.4), 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+.lableClass_label:active:after {
+    box-shadow: inset 0px 0px 30px rgba(0, 0, 0, 0.3), 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+.ui.menu .item {
+    /*padding: .42857143em 1.14285714em !important;*/
+    height: 50px;
+}
+
+.custom_input {
+  height: 40px;
+}
+
+.leaflet-cluster-anim .leaflet-marker-icon, .leaflet-cluster-anim .leaflet-marker-shadow {
+	-webkit-transition: -webkit-transform 0.3s ease-out, opacity 0.3s ease-in;
+	-moz-transition: -moz-transform 0.3s ease-out, opacity 0.3s ease-in;
+	-o-transition: -o-transform 0.3s ease-out, opacity 0.3s ease-in;
+	transition: transform 0.3s ease-out, opacity 0.3s ease-in;
+	}

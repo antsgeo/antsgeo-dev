@@ -1,14 +1,104 @@
-<!doctype html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>DeployCli</title>
-  <base href="/">
+    <title>Antsgeo</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
+    <!-- 1. Load libraries -->
+    <!-- Polyfill(s) for older browsers -->
+    <!-- <script src="node_modules/core-js/client/shim.min.js"></script>
+    <script src="node_modules/zone.js/dist/zone.js"></script>
+    <script src="node_modules/reflect-metadata/Reflect.js"></script>
+    <script src="node_modules/systemjs/dist/system.src.js"></script> -->
+    <!-- 2. Configure SystemJS -->
+    <!-- <script src="systemjs.config.js"></script> -->
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <!-- ____________Library with checking if failed load CDN______________ -->
+
+    <!-- Jquery -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script>
+      window.jQuery ||
+      console.log('JQUERY NOT LOADED');
+      document.write('<script src="assets/failload-lib/jquery-3.1.1.min.js">\x3C/script>');
+    </script>
+    <!-- Jquery -->
+
+    <!-- Semantic.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/semantic.min.js"></script>
+    <script>
+      window.$.site ||
+      console.log('SEMANTIC-UI.JS NOT LOADED');
+      document.write('<script src="assets/failload-lib/semantic.min.js">\x3C/script>');
+    </script>
+    <!-- Semantic.js -->
+
+    <!-- Semantic.css -->
+    <link onerror="semanticErrorFunc()" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/semantic.min.css">
+    <script type="text/javascript">
+      function semanticErrorFunc() {
+        console.log('SEMANTIC-UI.CSS NOT LOADED');
+        $('head').append('<link rel="stylesheet" href="assets/failload-lib/semantic.min.css">')
+      }
+    </script>
+    <!-- Semantic.css -->
+
+    <!-- Mapbox.js -->
+    <script src='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js'></script>
+    <script>
+      window.L ||
+      console.log('MAPBOX.JS NOT LOADED');
+      document.write('<script src="assets/failload-lib/mapbox.min.js">\x3C/script>');
+    </script>
+    <!-- Mapbox.js -->
+
+    <!-- Mapbox.css -->
+    <link onerror="mapboxErrorFunc()" href='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css' rel='stylesheet' />
+    <script type="text/javascript">
+      function mapboxErrorFunc() {
+        console.log('MAPBOX.CSS NOT LOADED');
+        $('head').append('<link rel="stylesheet" type="text/css" href="assets/failload-lib/mapbox.min.css">')
+      }
+    </script>
+    <!-- Mapbox.css -->
+
+    <!-- Marker cluster JS-->
+    <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
+    <script>
+      window.L.MarkerClusterGroup ||
+      console.log('CLUSTER-MAPBOX NOT LOADED');
+      document.write('<script src="assets/failload-lib/markercluster.min.js">\x3C/script>')
+    </script>
+    <!-- Marker cluster JS-->
+
+    <!-- Marker cluster CSS-->
+    <link onerror="clusterErrorFunc()" href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
+    <script type="text/javascript">
+      function clusterErrorFunc() {
+        console.log('CLUSTER-MAPBOX.CSS NOT LOADED');
+        $('head').append('<link rel="stylesheet" type="text/css" href="assets/failload-lib/markercluster.css">')
+      }
+    </script>
+    <!-- Marker cluster CSS-->
+
+    <!-- Clipboard -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.13/clipboard.min.js"></script>
+    <script>
+      window.Clipboard ||
+      console.log('CLIPBOARD NOT LOADED');
+      document.write('<script src="assets/failload-lib/clipboard.min.js">\x3C/script>')
+    </script>
+    <!-- Clipboard -->
+
+    <script>
+        // System.import('app').catch(function(err) {
+        //     console.error(err);
+        // });
+    </script>
+
 </head>
+<!-- 3. Display the application -->
 <body>
-  <app-root>Loading...</app-root>
+    <my-app>Antsgeo loading...</my-app>
 </body>
 </html>
