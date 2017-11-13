@@ -1,9 +1,84 @@
 <div class="ui container" [ngClass]="{map_cursor: changeCursorVar}" id="map">
-  <div class="ui active dimmer custom_dimmer" *ngIf="loaderMap">
-    <div class="ui text loader">Map loading...</div>
-  </div>
 </div>
 
 <div class="custom_footer">
-  Antsgeo, {{dateForFooter }}
+  Antsgeo {{dateForFooter}}
 </div>
+
+<div class="antsgeo-loading-wrap" *ngIf="loaderMap">
+  <div class="antsgeo-loading">
+    <i class="earth icon world"></i>
+    <p class="antsgeo">
+      Antsgeo loading
+      <span>.</span><span>.</span><span>.</span>
+    </p>
+  </div>
+</div>
+
+<!-- modal popup mobile -->
+<div class="ui modal coupled popup_modals" id="popup_modal">
+  <div class="image content">
+    <div class="description">
+      <div class="mobPopup_name" *ngIf="popupMobileProps.userData">
+        {{popupMobileProps.name}}
+      </div>
+      <div class="mobPopup_name mobPopup_name-width" *ngIf="!popupMobileProps.userData">
+        {{popupMobileProps.name}}
+      </div>
+      <div class="mobPopup_user" *ngIf="popupMobileProps.userData">
+        <div class="mobPopup_user-img" [ngStyle]="{'background-image':'url(' + popupMobileProps.userData.user_metadata.img + ')'}">
+
+        </div>
+        <a href="#" (click)="passUserIdUrl(popupMobileProps.userData)">{{popupMobileProps.userData.user_metadata.nickname}}</a>
+      </div>
+      <div class="mobPopup_comment">
+        {{popupMobileProps.comment}}
+      </div>
+      <hr class="labelClass_hr" />
+      <div class="mobPopup_coor">
+        {{popupMobileProps.coordinateX}}, {{popupMobileProps.coordinateY}}
+      </div>
+      <div class="mobPopup_time">
+        {{popupMobileProps.time}}
+      </div>
+    </div>
+    <div class="footer">
+      <button *ngIf="popupMobileProps.stringLink"
+              class="ui primary fluid basic button btnCopy btn"
+              [attr.data-clipboard-text]="popupMobileProps.stringLink">
+                <i class="icon copy"></i>
+                {{this.auth0.localLang.validate.copyLinkBtn}}
+      </button>
+      <div class="floating ui red label complain_label" *ngIf="!auth0.userProfile">{{this.auth0.localLang.validate.onlyRegister}}</div>
+      <button class="ui orange fluid basic button btnComplain" [disabled]="!auth0.userProfile">
+        <i class="warning sign orange icon"></i>
+        {{this.auth0.localLang.complain.complainBtn}}
+      </button>
+      <button class="ui grey fluid basic button" (click)="closePopupMobile()">{{this.auth0.localLang.modalTag.set4}}</button>
+    </div>
+  </div>
+</div>
+<!-- modal popup mobile -->
+
+<!-- modal popup mobile complain -->
+<div class="ui modal coupled popup_modals" id="popup_modal_complain">
+  <div class="image content">
+    <div class="description">
+      <div class="mobPopup_name mobPopup_name-complain">
+        {{this.auth0.localLang.complain.head}}
+      </div>
+      <div class="mobPopup_comment">
+        {{this.auth0.localLang.complain.comment}}
+      </div>
+      <div class="ui form">
+        <textarea name="name" class="mobPopup_textarea" placeholder="{{this.auth0.localLang.complain.placeholder}}" #textArr></textarea>
+      </div>
+      <h4 class="ui horizontal divider header"><i class="Angle Double Down icon"></i></h4>
+    </div>
+    <div class="footer">
+      <button class="ui orange fluid basic button btnComplain labelClass_complain-window-send" *ngIf="auth0.userProfile" (click)="sendComplainPopupMobile(textArr)"><i class="icon send"></i>{{this.auth0.localLang.complain.sendBtn}}</button>
+      <button class="ui grey fluid basic button btnCloseComplain" ><i class="arrow left icon"></i>{{this.auth0.localLang.complain.back}}</button>
+    </div>
+  </div>
+</div>
+<!-- modal popup mobile complain -->

@@ -1,74 +1,149 @@
 <!-- Main nemu -->
-<div class="ui stackable container menu" id="menu" >
-    <a class="item" (click)="modalAddTag(true)" [class.disabled]="flagsForNotification.failedGetMarkers.forButton">
-        {{translateLibrary.modalTag.title}}
-      </a>
-    <a class="item" (click)="modalHelp()">
-        {{translateLibrary.modalHelp.title}}
-      </a>
-    <a class="item" (click)="modalContact()">
-        {{translateLibrary.modalContact.title}}
-      </a>
-    <a class="item" (click)="modalAbout()">
-        {{translateLibrary.modalAbout.title}}
-      </a>
+<div class="ui stackable container menu" id="menu">
+  <div class="header item" *ngIf="!auth0.isAuthenticated()">
+    <i class="world icon icon_world"></i>antsgeo
+  </div>
+  <a class="item user_button" (click)="getUserMarkers()" *ngIf="auth0.isAuthenticated() && auth0.userProfile">
+      <div class="user_btn-img" [ngStyle]="{'background-image': 'url(' + sanitize(auth0.userProfile.user_metadata.img) + ')'}"></div>
+      <span class="user_btn-nickname"><b>{{auth0.userProfile.user_metadata.nickname}}</b></span>
+  </a>
+  <!-- <a class="item fadeOut"
+     (click)="">
+        test
+  </a> -->
+  <a class="item fadeOut"
+     (click)="resetUserMarkers()"
+     *ngIf="btnResetMarkers">
+    {{this.translateService.translateLibrary.menu.reset}}
+  </a>
+  <a class="item fadeOut"
+     (click)="modalAddTag(true)"
+     [class.disabled]="flagsForNotification.failedGetMarkers.forButton">
+        {{this.translateService.translateLibrary.modalTag.title}}
+  </a>
+
+  <div class="ui dropdown item fadeOut" id="moreSelect" >
+    <span class="header">{{this.translateService.translateLibrary.menu.categories.title}}</span>
+    <i class="dropdown icon"></i>
     <div class="menu">
-        <div class="item">
-            <select class="ui small selection dropdown custon_dropdown" #lang (change)="changeLang(lang.value)">
-              <option value="en" selected><i class="gb flag"></i> English</option>
-              <option value="ru" ><i class="ru flag"></i> Россия</option>
-            </select>
-        </div>
+      <div class="header">{{this.translateService.translateLibrary.menu.categories.subtitle1}}</div>
+      <div class="item" (click)="modalHelp()">
+        <span>{{this.translateService.translateLibrary.modalHelp.title}}</span>
+      </div>
+      <div class="item" (click)="modalContact()">
+        <span>{{this.translateService.translateLibrary.modalContact.title}}</span>
+      </div>
+      <div class="item" (click)="modalAbout()">
+        <span>{{this.translateService.translateLibrary.modalAbout.title}}</span>
+      </div>
+
+      <div class="divider"></div>
+      <div class="header">{{this.translateService.translateLibrary.menu.categories.subtitle2}}</div>
+
+      <div class="item custom_select">
+        <select class="ui medium selection dropdown custon_dropdown lang_drop" #lang id="langSelect"
+                (change)="this.translateService.changeLanguage(lang.value)">
+            <option value="en" selected><i class="gb flag"></i> English</option>
+            <option value="ru" ><i class="ru flag"></i> Россия</option>
+        </select>
+      </div>
+
+      <div class="divider custom_divider" *ngIf="auth0.isAuthenticated()"></div>
+      <div class="header" *ngIf="auth0.isAuthenticated()">{{this.translateService.translateLibrary.menu.logout}}</div>
+
+      <div class="item custom_logout" *ngIf="auth0.isAuthenticated()">
+        <button class="small ui negative button"
+                (click)="auth0.logout()">
+                {{this.translateService.translateLibrary.menu.logout}}
+        </button>
+      </div>
+
     </div>
-    <div class="right menu">
-        <div class="item">
-            <div class="ui icon input custom_input">
-                <input type="text" placeholder="{{translateLibrary.placeholder}}" [(ngModel)]="argumentForFilter" (ngModelChange)="sendDataToFilter($event)">
-                <i class="search link icon"></i>
-            </div>
-        </div>
+  </div>
+
+  <div class="right menu search_box-container" >
+    <div class="item search_box">
+      <div class="ui icon input " id="custom_input" >
+        <input type="text" id="input_filter"
+                           (focus)="onFocusSearchBox()"
+                           (blur)="onBlurSearchBox()"
+                           placeholder="{{this.translateService.translateLibrary.placeholder}}"
+                           [(ngModel)]="argumentForFilter"
+                           (ngModelChange)="sendDataToFilter($event)">
+        <i class="search link icon"></i>
+      </div>
     </div>
+  </div>
+
+    <div class="item right" (click)="modalLogin()" *ngIf="!auth0.isAuthenticated()">
+        <button class="small positive ui button">{{this.translateService.translateLibrary.menu.login}}</button>
+    </div>
+
 </div>
 <!-- Main nemu -->
 
 <!-- Sidebar menu -->
 <div class="ui sidebar stackable container menu custom_sidebar">
-    <a class="item sidebar_item" (click)="modalAddTag(true)" [class.disabled]="flagsForNotification.failedGetMarkers.forButton">
-        {{translateLibrary.modalTag.title}}
-    </a>
-    <a class="item sidebar_item" (click)="modalHelp()">
-        {{translateLibrary.modalHelp.title}}
-    </a>
-    <a class="item sidebar_item" (click)="modalContact()">
-        {{translateLibrary.modalContact.title}}
-    </a>
-    <a class="item sidebar_item" (click)="modalAbout()">
-        {{translateLibrary.modalAbout.title}}
-    </a>
-    <div class="menu">
-        <div class="item">
-            <select class="ui small selection dropdown custon_dropdown" #langMobile (change)="changeLang(langMobile.value)">
-              <option value="en" selected><i class="gb flag"></i> English</option>
-              <option value="ru" ><i class="ru flag"></i> Россия</option>
-            </select>
-        </div>
+  <div class="header active item" id="logo_menu-miobile" *ngIf="!auth0.isAuthenticated()">
+    <i class="world icon icon_world"></i>antsgeo
+  </div>
+  <a class="item sidebar_item" (click)="getUserMarkers()" *ngIf="auth0.isAuthenticated() && auth0.userProfile">
+      <div class="user_btn-img user_btn-img-mobile" [ngStyle]="{'background-image': 'url(' + sanitize(auth0.userProfile.user_metadata.img) + ')'}"></div>
+      <b class="user_btn-nickname-mobile">{{auth0.userProfile.user_metadata.nickname}}</b>
+  </a>
+  <a class="item sidebar_item"
+     (click)="resetUserMarkersMobile()"
+     *ngIf="btnResetMarkers">
+    {{this.translateService.translateLibrary.menu.reset}}
+  </a>
+  <a class="item sidebar_item" (click)="modalAddTag(true)" [class.disabled]="flagsForNotification.failedGetMarkers.forButton">
+      {{this.translateService.translateLibrary.modalTag.title}}
+  </a>
+  <a class="item sidebar_item" (click)="modalHelp()">
+      {{this.translateService.translateLibrary.modalHelp.title}}
+  </a>
+  <a class="item sidebar_item" (click)="modalContact()">
+      {{this.translateService.translateLibrary.modalContact.title}}
+  </a>
+  <a class="item sidebar_item" (click)="modalAbout()">
+      {{this.translateService.translateLibrary.modalAbout.title}}
+  </a>
+  <div class="menu">
+    <div class="item">
+      <select class="ui small selection dropdown custon_dropdown-mobile lang_drop" #langMobile
+              (change)="this.translateService.changeLanguage(langMobile.value)"
+              id="langSelectMobile">
+          <option value="en" selected><i class="gb flag"></i> English</option>
+          <option value="ru" ><i class="ru flag"></i> Россия</option>
+      </select>
     </div>
+  </div>
+  <div class="item" (click)="modalLoginMobile()" *ngIf="!auth0.isAuthenticated()">
+        <button class="small fluid positive ui button">{{this.translateService.translateLibrary.menu.login}}</button>
+  </div>
+  <a class="item sidebar_item" (click)="auth0.logout()" *ngIf="auth0.isAuthenticated()">
+        <button class="small fluid negative ui button">{{this.translateService.translateLibrary.menu.logout}}</button>
+  </a>
 </div>
+
 <!-- Sidebar menu -->
 
 <!-- Mobile main menu -->
 <div class="ui container menu custom_menu-mobile">
-    <a class="item" (click)="openSidebar()">
-        <i class="sidebar icon custom_sidebar-icon"></i>
-    </a>
-    <div class="right menu">
-        <div class="item">
-            <div class="ui icon input custom_input">
-                <input type="text" placeholder="Search..." [(ngModel)]="argumentForFilter" (ngModelChange)="sendDataToFilter($event)">
-                <i class="search link icon"></i>
-            </div>
-        </div>
+  <a class="item" (click)="openSidebar()">
+    <i class="sidebar icon custom_sidebar-icon"></i>
+  </a>
+  <div class="right menu item_search-mobile-right">
+    <div class="item item_search-mobile">
+      <div class="ui icon input custom_input custom_input-mobile">
+        <input type="text"
+               placeholder="{{this.translateService.translateLibrary.placeholder}}"
+               [(ngModel)]="argumentForFilter"
+               (ngModelChange)="sendDataToFilter($event)">
+        <i class="search link icon"></i>
+      </div>
     </div>
+  </div>
 </div>
 <!-- Mobile main menu -->
 
@@ -79,13 +154,43 @@
     <i class="Setting notched loading icon"></i>
     <div class="content">
       <div class="header">
-        {{translateLibrary.errorGetMarkersWindow.title}}
+        {{this.translateService.translateLibrary.errorGetMarkersWindow.title}}
       </div>
-      <p>{{translateLibrary.errorGetMarkersWindow.text}}</p>
+      <p>{{this.translateService.translateLibrary.errorGetMarkersWindow.text}}</p>
     </div>
   </div>
 </div>
 <!-- Message for failed get markers -->
+
+<!-- Message for handled error -->
+<div class="ui container custom_message" [@fadeInOut] *ngIf="handleError.status">
+  <div class="ui small icon negative message">
+    <i class="close icon" (click)="handleError.status = false"></i>
+    <i class="Setting notched loading icon"></i>
+    <div class="content">
+      <div class="header">
+        {{handleError.errorHead}}
+      </div>
+      <p>{{handleError.errorBody}}</p>
+    </div>
+  </div>
+</div>
+<!-- Message for handled error -->
+
+<!-- Message for handled success -->
+<div class="ui container custom_message" [@fadeInOut] *ngIf="handleSuccess.status">
+  <div class="ui small icon positive message">
+    <i class="close icon" (click)="handleSuccess.status = false"></i>
+    <i class="Check Circle notched icon"></i>
+    <div class="content">
+      <div class="header">
+        {{handleSuccess.successHead}}
+      </div>
+      <p>{{handleSuccess.successBody}}</p>
+    </div>
+  </div>
+</div>
+<!-- Message for handled success -->
 
 <!-- Message, marker is added! -->
 <div class="ui container custom_message test_mes" [@scale] *ngIf="flagsForNotification.successAddedMarker">
@@ -94,7 +199,7 @@
     <i class="Check Circle notched icon"></i>
     <div class="content">
       <div class="header">
-        {{translateLibrary.successAddMarker}}
+        {{this.translateService.translateLibrary.successAddMarker}}
       </div>
     </div>
   </div>
@@ -108,7 +213,7 @@
     <i class="Marker notched icon"></i>
     <div class="content">
       <div class="header">
-        {{translateLibrary.addingMarkerOnMap}}
+        {{this.translateService.translateLibrary.addingMarkerOnMap}}
       </div>
     </div>
   </div>
@@ -116,133 +221,759 @@
 <!-- Message for addTag -->
 
 <!-- Form for add tag -->
-<div class="ui basic modal" id="modalAddTag">
-    <i class="close icon" (click)="modalAddTag(false)"></i>
-    <div class="header">
-        {{translateLibrary.modalTag.title}}
-    </div>
-    <div class="content">
-        <form class="ui form" id="addTagForm">
+<div class="ui basic coupled-privacy modal" id="modalAddTag">
+  <i class="close icon" (click)="modalAddTag(false)"></i>
+  <div class="header">
+    {{this.translateService.translateLibrary.modalTag.title}}
+  </div>
+  <div class="content">
+    <form class="ui form" id="addTagForm">
 
-            <label class="custom_label">{{translateLibrary.modalTag.set1}}</label>
-            <div class="field ui left icon input" style="width: 100%">
-                <input type="text" placeholder="{{translateLibrary.modalTag.set1}}" name="name" [(ngModel)]="data.name" (ngModelChange)="checkFormName()">
-                <i class="align left icon"></i>
-            </div>
+      <div class="field">
+        <div class="two fields">
 
-            <label class="custom_label">{{translateLibrary.modalTag.set2}}</label>
-            <div class="field ui left icon input" style="width: 100%">
-                <textarea class="custom_textarea" rows="3" placeholder="{{translateLibrary.modalTag.set2}}" name="comment" [(ngModel)]="data.comment" (ngModelChange)="checkFormComment()"></textarea>
-                <i class="align left icon textarea_icon"></i>
-            </div>
+          <div class="field ui left icon">
+            <label class="genus_label">{{this.translateService.translateLibrary.modalTag.set6}}</label>
+            <i class="list icon genus_icon"></i>
+            <select class="ui search selection_genus dropdown">
+                <option *ngFor="let item of selectGenus">{{item}}</option>
+            </select>
+          </div>
 
-            <div class="field">
-                <label>{{translateLibrary.modalTag.set3}}</label>
-                <div class="three fields">
-                    <div class="field">
-                        <input type="text" placeholder="Lat" disabled name="lat" [(ngModel)]="data.coordinateX">
-                    </div>
-                    <div class="field">
-                        <input type="text" placeholder="Lng" disabled name="lng" [(ngModel)]="data.coordinateY">
-                    </div>
-                    <div class="field">
-                        <input type="text" placeholder="Time" disabled name="date" [(ngModel)]="data.time">
-                    </div>
-                </div>
-            </div>
-        </form>
-
-        <div *ngIf="checkForm.name.message" [@fadeInOut] class="ui negative icon message tiny">
-            <i class="notched Warning Sign icon"></i>
-            <div class="content">
-                <div class="header">
-                    {{translateLibrary.errorWindow.p1.title}}
-                </div>
-                <p>{{translateLibrary.errorWindow.p1.text}}</p>
-            </div>
+          <div class="field ui left icon input custom_specie">
+            <label class="custom_label">{{this.translateService.translateLibrary.modalTag.set1}}</label>
+            <input type="text" placeholder="{{this.translateService.translateLibrary.modalTag.set1}}"
+                               [(ngModel)]="data.name"
+                               (ngModelChange)="checkFormName()" name="name">
+            <i class="align left icon"></i>
+          </div>
         </div>
+      </div>
 
-        <div *ngIf="checkForm.comment.message" [@fadeInOut] class="ui negative icon message tiny">
-            <i class="notched Warning Sign  icon"></i>
-            <div class="content">
-                <div class="header">
-                    {{translateLibrary.errorWindow.p2.title}}
-                </div>
-                <p>{{translateLibrary.errorWindow.p2.text}}</p>
-            </div>
+      <label class="custom_label">{{this.translateService.translateLibrary.modalTag.set2}}</label>
+      <div class="field ui left icon input" style="width: 100%">
+        <textarea class="custom_textarea" rows="3" placeholder="{{this.translateService.translateLibrary.modalTag.set2}}" name="comment" [(ngModel)]="data.comment" (ngModelChange)="checkFormComment()"></textarea>
+        <i class="align left icon textarea_icon"></i>
+      </div>
+
+      <div class="field">
+        <label>{{this.translateService.translateLibrary.modalTag.set3}}</label>
+        <div class="three fields">
+          <div class="field">
+            <input type="text" placeholder="Lat" disabled name="lat" [(ngModel)]="data.coordinateX">
+          </div>
+          <div class="field">
+            <input type="text" placeholder="Lng" disabled name="lng" [(ngModel)]="data.coordinateY">
+          </div>
+          <div class="field">
+            <input type="text" placeholder="Time" disabled name="date" [(ngModel)]="data.time">
+          </div>
         </div>
+      </div>
+    </form>
 
+    <div *ngIf="checkForm.name.message || checkForm.genus.message" [@fadeInOut] class="ui negative icon message tiny">
+      <i class="notched Warning Sign icon"></i>
+      <div class="content">
+        <div class="header">
+          {{this.translateService.translateLibrary.errorWindow.p1.title}}
+        </div>
+        <p>{{this.translateService.translateLibrary.errorWindow.p1.text}}</p>
+      </div>
     </div>
-    <div class="actions">
-        <div class="ui cancel red basic inverted button" (click)="modalAddTag(false)"><i class="remove icon"></i>{{translateLibrary.modalTag.set4}}</div>
-        <div class="ui ok green basic inverted button" [class.disabled]="!this.checkForm.filledAll" (click)="bootstrapDataForSend(data)"><i class="checkmark icon"></i>{{translateLibrary.modalTag.set5}}</div>
+
+    <div *ngIf="checkForm.comment.message" [@fadeInOut] class="ui negative icon message tiny">
+      <i class="notched Warning Sign  icon"></i>
+      <div class="content">
+        <div class="header">
+          {{this.translateService.translateLibrary.errorWindow.p2.title}}
+        </div>
+        <p>{{this.translateService.translateLibrary.errorWindow.p2.text}}</p>
+      </div>
     </div>
+
+  </div>
+  <div class="actions custom_actions">
+    <div class="privacy-container">
+      {{this.translateService.translateLibrary.modalTag.privacy}} <a href="#" (click)="openPrivacy()">{{this.translateService.translateLibrary.modalTag.privacyLink}}</a>
+    </div>
+    <div class="ui cancel red basic inverted button" (click)="modalAddTag(false)"><i class="remove icon"></i>{{this.translateService.translateLibrary.modalTag.set4}}</div>
+    <div class="ui ok green basic inverted button" [class.disabled]="!this.checkForm.filledAll" (click)="bootstrapDataForSend(data)"><i class="checkmark icon"></i>{{this.translateService.translateLibrary.modalTag.set5}}</div>
+  </div>
 </div>
 <!-- Form for add tag -->
 
+<!-- Modal of privacy -->
+<div class="ui basic coupled-privacy modal" id="modalPrivacy">
+  <i class="close icon close-modal-help"></i>
+  <div class="header">
+    <span [innerHTML]="this.translateService.translateLibrary.modalPrivacy.title"></span>
+  </div>
+  <div class="content">
+    <span [innerHTML]="this.translateService.translateLibrary.modalPrivacy.content"></span>
+  </div>
+  <div class="actions custom_actions">
+    <div class="ui ok green basic inverted button btnClose-privacy" (click)="privacyToAdd()"><i class="arrow left icon"></i>{{this.translateService.translateLibrary.modalPrivacy.btnClose}}</div>
+  </div>
+</div>
+<!-- Modal of privacy -->
+
 <!-- Modal help -->
 <div class="ui basic modal" id="modalHelp">
-    <i class="close icon"></i>
-    <div class="header">
-        {{translateLibrary.modalHelp.title}}
+  <i class="close icon close-modal-help"></i>
+  <div class="header">
+    {{this.translateService.translateLibrary.modalHelp.title}}
+  </div>
+  <div class="content">
+    <h3> {{this.translateService.translateLibrary.modalHelp.p1.title}} </h3>
+    <div class="content custom_content">
+      <p [innerHTML]="this.translateService.translateLibrary.modalHelp.p1.text"></p>
     </div>
-    <div class="content">
-        <h3> {{translateLibrary.modalHelp.p1.title}} </h3>
-        <div class="content custom_content">
-            <p [innerHTML]="translateLibrary.modalHelp.p1.text"></p>
-        </div>
-        <h3> {{translateLibrary.modalHelp.p2.title}} </h3>
-        <div class="content custom_content">
-            <p [innerHTML]="translateLibrary.modalHelp.p2.text"></p>
-        </div>
-        <h3> {{translateLibrary.modalHelp.p3.title}} </h3>
-        <div class="content custom_content">
-            <p [innerHTML]="translateLibrary.modalHelp.p3.text"></p>
-        </div>
-        <h3> {{translateLibrary.modalHelp.p4.title}} </h3>
-        <div class="content custom_content">
-            <p [innerHTML]="translateLibrary.modalHelp.p4.text"></p>
-        </div>
+    <h3> {{this.translateService.translateLibrary.modalHelp.p2.title}} </h3>
+    <div class="content custom_content">
+      <p [innerHTML]="this.translateService.translateLibrary.modalHelp.p2.text"></p>
     </div>
-    <div class="actions">
-        <div class="ui ok green basic inverted button"><i class="checkmark icon"></i>{{translateLibrary.modalHelp.button}}</div>
+    <h3> {{this.translateService.translateLibrary.modalHelp.p3.title}} </h3>
+    <div class="content custom_content">
+      <p [innerHTML]="this.translateService.translateLibrary.modalHelp.p3.text"></p>
     </div>
+    <h3> {{this.translateService.translateLibrary.modalHelp.p4.title}} </h3>
+    <div class="content custom_content">
+      <p [innerHTML]="this.translateService.translateLibrary.modalHelp.p4.text"></p>
+    </div>
+  </div>
+  <div class="actions custom_actions">
+    <div class="ui ok green basic inverted button"><i class="checkmark icon"></i>{{this.translateService.translateLibrary.modalHelp.button}}</div>
+  </div>
 </div>
 <!-- Modal help -->
 
 <!-- Modal contact -->
 <div class="ui basic modal" id="modalContact">
-    <i class="close icon"></i>
-    <div class="header">
-        {{translateLibrary.modalContact.title}}
+  <i class="close icon"></i>
+  <div class="header">
+    {{this.translateService.translateLibrary.modalContact.title}}
+  </div>
+  <div class="content">
+
+    <div class="ui grid container container-contact stackable eight column">
+      <div class="contact-column eight wide column">
+
+        <form class="ui form inverted contact-form">
+          <div class="field">
+            <label>{{this.translateService.translateLibrary.modalContact.name}}</label>
+            <div class="ui left icon input">
+              <input type="text"
+                     placeholder="{{this.translateService.translateLibrary.modalContact.name}}"
+                     name="contactName"
+                     [(ngModel)]="contactForm.contactName" />
+              <i class="User icon"></i>
+            </div>
+          </div>
+          <label class="contact-label">{{this.translateService.translateLibrary.modalContact.comment}}</label>
+          <div class="field ui left icon input custom_textarea--contact">
+            <textarea class="custom_textarea"
+                      name="contactMessage"
+                      [(ngModel)]="contactForm.contactMessage" rows="3"
+                      placeholder="{{this.translateService.translateLibrary.modalContact.comment}}"></textarea>
+            <i class="align left icon textarea_icon"></i>
+          </div>
+
+          <div class="ui negative icon message small contact-error" [@scale] *ngIf="contactForm.errorWindow">
+            <i class="notched warning sign icon"></i>
+            <div class="content">
+              <ul class="list">
+                <li>{{this.translateService.translateLibrary.modalContact.error}}</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="ui ok green fluid button"
+               *ngIf="!contactForm.contactLoading"
+               (click)="sendContactForm()">
+            <i class="send icon"></i>
+            {{this.translateService.translateLibrary.modalContact.sendBtn}}
+          </div>
+          <button *ngIf="contactForm.contactLoading" class="ui button fluid green loading">Loading</button>
+        </form>
+
+      </div>
+
+      <div class="ui vertical divider inverted contact-divider">{{this.translateService.translateLibrary.modalContact.divider}}</div>
+
+      <div class="contact-column eight wide middle aligned column">
+        <p class="contact-href">
+          {{this.translateService.translateLibrary.modalContact.mailHead}} <br />
+          <a href="mailto:contact.antgeo@gmail.com">contact.antgeo@gmail.com</a>
+        </p>
+
+      </div>
     </div>
-    <div class="content">
-        <div class="content custom_content">
-            <p>
-                {{translateLibrary.modalContact.p1}} <a href="mailto:contact.antgeo@gmail.com">contact.antgeo@gmail.com</a>
-            </p>
-        </div>
-    </div>
-    <div class="actions">
-        <div class="ui ok green basic inverted button"><i class="checkmark icon"></i>{{translateLibrary.modalContact.button}}</div>
-    </div>
+
+  </div>
+  <div class="actions custom_actions">
+    <div class="ui ok green basic inverted button"><i class="checkmark icon"></i>{{this.translateService.translateLibrary.modalContact.button}}</div>
+  </div>
 </div>
 <!-- Modal contact -->
 
 <!-- Modal about -->
 <div class="ui basic modal" id="modalAbout">
-    <i class="close icon"></i>
-    <div class="header">
-        {{translateLibrary.modalAbout.title}}
+  <i class="close icon"></i>
+  <div class="header">
+    {{this.translateService.translateLibrary.modalAbout.title}}
+  </div>
+  <div class="content">
+    <div class="content custom_content">
+      <p [innerHTML]="this.translateService.translateLibrary.modalAbout.p1">
+      </p>
     </div>
-    <div class="content">
-        <div class="content custom_content">
-            <p [innerHTML]="translateLibrary.modalAbout.p1">
-            </p>
-        </div>
-    </div>
-    <div class="actions">
-        <div class="ui ok green basic inverted button"><i class="checkmark icon"></i>{{translateLibrary.modalAbout.button}}</div>
-    </div>
+  </div>
+  <div class="actions custom_actions">
+    <div class="ui ok green basic inverted button"><i class="checkmark icon"></i>{{this.translateService.translateLibrary.modalAbout.button}}</div>
+  </div>
 </div>
 <!-- Modal about -->
+
+<div class="ui basic modal" id="modalUser" *ngIf="auth0.isAuthenticated() && auth0.userProfile">
+
+  <div class="ui header custom_userProfile_head userProfile_head" id="">
+    <i class="setting icon setting-icon" id="setting-icon" (click)="openSettingsUser()"></i>
+    <i class="user icon marker-icon" id="marker-icon" (click)="openMarkersUser()"></i>
+    <i class="remove icon close-icon" (click)="closeUserModal()"></i>
+
+    <div class="custom_userProfile-nick">
+      <div class="custom_userProfile-nick-inside">
+        {{auth0.userProfile.user_metadata.nickname}}
+      </div>
+    </div>
+
+  </div>
+
+  <div class="content custom_userProfile_body">
+
+    <div class="custom_userProfile-img"
+         [ngStyle]="{'background-image': 'url(' + sanitize(auth0.userProfile.user_metadata.img) + ')'}">
+    </div>
+
+    <div class="marker-block-group" id="settings_block">
+      <h3 class="markers_header">
+        {{this.translateService.translateLibrary.userModal.stnHeader}}
+      </h3>
+
+      <div class="ui two column grid responsive custom_settings custom_settings-two">
+        <div class="column column-left" id="">
+          <div class="column_header">
+            {{this.translateService.translateLibrary.userModal.changePswdHeader}}
+          </div>
+            <button class="ui orange button reset_password-button"
+                    (click)="changePassword()"
+                    *ngIf="!changePasswordResponse">
+              {{this.translateService.translateLibrary.userModal.changePswd}}
+            </button>
+            <button class="ui green icon button reset_password-button"
+                    *ngIf="changePasswordResponse"
+                    [disabled]="changePasswordResponse">
+              <i class="icon checkmark"></i>
+              {{this.translateService.translateLibrary.userModal.changePswdSend}}
+            </button>
+            <div class="" *ngIf="!changePasswordResponse" [innerHTML]="this.translateService.translateLibrary.userModal.changePswdText">
+
+            </div>
+            <div class="" *ngIf="changePasswordResponse" [innerHTML]="this.translateService.translateLibrary.userModal.changePswdSentText">
+
+            </div>
+        </div>
+
+        <div class="column column-right" id="">
+            <div class="column_header">
+              {{this.translateService.translateLibrary.userModal.changeAvatar}}
+            </div>
+            <div class="changing_img_wrap">
+              <img class="changing_img" id="change-avatar" [src]="changeAvatar ? changeAvatar : auth0.userProfile.picture" alt=""/>
+            </div>
+            <div class="ui action input">
+              <input type="text" [(ngModel)]="changeAvatar" (ngModelChange)="checkImgLink(changeAvatar)"
+                     placeholder="{{this.translateService.translateLibrary.userModal.changeAvatarInput}}" />
+              <button *ngIf="!this.changeAvatarResponse.loading" class="ui button green"
+                      [disabled]="this.changeAvatarResponse.disabled"
+                      (click)="auth0.changeImg(changeAvatar)">
+                {{this.translateService.translateLibrary.userModal.changeAvatarBtn}}
+              </button>
+              <button *ngIf="this.changeAvatarResponse.loading" class="ui button green loading" >Loading</button>
+            </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div id="marker_block">
+
+    <!-- Message for verify mail -->
+    <div class="ui container custom_message verify_message" *ngIf="!auth0.userProfile.email_verified">
+      <div class="ui small icon info message">
+        <i class="Info Circle icon"></i>
+        <div class="content">
+          <div class="header">
+            {{this.translateService.translateLibrary.userModal.verifyHeader}}
+          </div>
+          <p> {{this.translateService.translateLibrary.userModal.verifyText}}
+            <a href="#" class="ui" (click)="verifyEmail()" *ngIf="!verifyEmailForm.verifyLoading && !verifyEmailForm.verifySent">
+              {{this.translateService.translateLibrary.userModal.verifySend}}
+            </a>
+            <a href="#" class="ui" *ngIf="verifyEmailForm.verifyLoading">
+              {{this.translateService.translateLibrary.userModal.verifyLoading}}
+            </a>
+            <a href="#" class="ui" *ngIf="verifyEmailForm.verifySent">
+              {{this.translateService.translateLibrary.userModal.verifySent}}
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- Message for verify mail -->
+
+    <h3 class="markers_header">
+      {{this.translateService.translateLibrary.userModal.header}}
+    </h3>
+
+    <div class="ui two statistics custom_statistics">
+      <div class="statistic">
+        <div class="value" *ngIf="accountMarkers">
+          {{accountMarkers.length ? accountMarkers.length : '∞'}}
+        </div>
+        <div class="label">
+          {{this.translateService.translateLibrary.userModal.numberMrks}}
+        </div>
+      </div>
+      <div class="statistic">
+        <div class="text value custom_statistics_btn">
+          <button class="ui teal basic button"
+                  (click)="sendUserMarker(accountMarkers)"
+                  [disabled]="accountMarkers.length ? false : true">
+            {{this.translateService.translateLibrary.userModal.viewBtn}}
+          </button>
+        </div>
+        <div class="label">
+          {{this.translateService.translateLibrary.userModal.viewBtnTitle}}
+        </div>
+      </div>
+    </div>
+
+    <div class="ui fluid icon input custom_input-markers">
+      <input type="text" [(ngModel)]="filterExpression" placeholder="{{this.translateService.translateLibrary.userModal.searchMrk}}">
+      <i class="search icon"></i>
+    </div>
+
+    <div class="ui segment custom_segment-markers">
+
+      <div class="ui active dimmer" *ngIf="dimmerAccountMarkers">
+        <div class="ui loader"></div>
+      </div>
+
+      <div class="not_markers" *ngIf="notHaveAccountMarkers">
+        {{this.translateService.translateLibrary.userModal.notMrks}}
+      </div>
+
+      <div class="ui styled fluid accordion" id="marker_accordion">
+
+        <span class="divide_accordion-item" style="display: block;"
+              [@fadeInOut]
+              *ngFor="let marker of accountMarkers | filterMarkersProfile:filterExpression">
+          <div class="title">
+            <a class="ui label custom_icon-marker" (click)="openUserMarker(marker._id.$oid)">
+              <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	              viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+                <g>
+                	<path d="M256,0C167.641,0,96,71.625,96,160c0,24.75,5.625,48.219,15.672,69.125C112.234,230.313,256,512,256,512l142.594-279.375
+                		C409.719,210.844,416,186.156,416,160C416,71.625,344.375,0,256,0z M256,256c-53.016,0-96-43-96-96s42.984-96,96-96
+                		c53,0,96,43,96,96S309,256,256,256z"/>
+                </g>
+              </svg>
+            </a>
+            <i class="dropdown icon custom_icon-dropdown"> </i>
+
+            <span class="custom_title_name">{{marker.name}}</span>
+            <span class="custom_title_comment">{{marker.comment}} </span>
+
+            <button class="ui basic icon button custom_title_linkbtn btn"
+                    [attr.data-tooltip]="this.translateService.translateLibrary.userModal.copyLinkMrk"
+                    [attr.data-position]="'left center'"
+                    [attr.data-clipboard-text]="'https://antsgeo.github.io/?id='+marker._id.$oid">
+              <i class="linkify icon"></i>
+            </button>
+
+          </div>
+          <div class="content">
+            <div class="header">
+              {{this.translateService.translateLibrary.userModal.editMrk}} <i class="icon write custom-edit_marker"></i>
+            </div>
+
+            <div class="ui input fluid labeled edit_input">
+              <div class="ui label">
+                {{this.translateService.translateLibrary.userModal.nameMrk}}:
+              </div>
+              <input type="text" [(ngModel)]="marker.name">
+            </div>
+
+            <div class="ui input fluid labeled edit_input edit_second_input">
+              <div class="ui label">
+                {{this.translateService.translateLibrary.userModal.commentMrk}}:
+              </div>
+              <input type="text" [(ngModel)]="marker.comment">
+            </div>
+            <div class="ui clearing"></div>
+            <button
+              type="button" class="ui button icon fluid edit_button"
+              (click)="auth0.updateMarker(marker)"
+              *ngIf="!auth0.btnUpdateLoading">
+
+              <i class="icon write"></i>
+              {{this.translateService.translateLibrary.userModal.updBtnMrk}}
+            </button>
+            <button class="ui fluid loading button edit_button"
+                    *ngIf="auth0.btnUpdateLoading">
+                {{this.translateService.translateLibrary.userModal.updBtnMrkLoading}}
+            </button>
+          </div>
+        </span>
+      </div>
+    </div>
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- Modal user -->
+
+<!-- Modal login/signup/reset pass -->
+<div class="ui basic small blurring modal" id="modalLogin">
+
+  <div class="ui icon header custom_logo-font">
+    <i class="world icon custom_logo-icon"></i>
+    Antsgeo
+  </div>
+
+  <!-- Headers for forms -->
+
+  <h4 class="ui horizontal custom_divider inverted divider" id="hFormLogin">
+     {{this.translateService.translateLibrary.loginModal.login}}
+  </h4>
+
+  <h4 class="ui horizontal custom_divider inverted divider" id="hFormSignup">
+     {{this.translateService.translateLibrary.loginModal.signup}}
+  </h4>
+
+  <h4 class="ui horizontal custom_divider inverted divider" id="hFormReset">
+     {{this.translateService.translateLibrary.loginModal.rstPswd}}
+  </h4>
+
+  <!-- Headers for forms -->
+
+  <div class="content login_content">
+
+    <!-- Login form -->
+
+    <form class="ui form" id="login_form"
+          (ngSubmit)="validateService.checkLoginForm(emaillogin.value, passwordlogin.value)">
+
+      <div class="field fluid ui left icon input custom_input-login">
+        <input type="text" name="name"
+               #emaillogin
+               placeholder="{{this.translateService.translateLibrary.loginModal.placeholderEmail}}"
+               autocomplete="on">
+        <i class="user icon"></i>
+        <i class="checkmark icon checking_icon" [@scale] *ngIf="validateService.checkFormEmail(emaillogin.value)"></i>
+      </div>
+
+      <div class="field fluid ui left icon input custom_input-login">
+        <input type="password" #passwordlogin
+               placeholder="{{this.translateService.translateLibrary.loginModal.placeholderPswd}}">
+        <i class="lock icon"></i>
+      </div>
+
+      <div class="ui negative icon message small custom_errors" [@scale] *ngIf="validateService.resultValidateForm.length">
+        <i class="notched warning sign icon"></i>
+        <div class="content">
+          <ul class="list">
+            <li *ngFor="let item of validateService.resultValidateForm">{{item}}</li>
+          </ul>
+          {{auth0.validationFromAuth0}}
+        </div>
+      </div>
+
+      <div class="ui negative icon message small custom_errors" [@scale] *ngIf="auth0.validationFromAuth0">
+        <i class="notched warning sign icon"></i>
+        <div class="content">
+          {{auth0.validationFromAuth0}}
+          <div class="ui inverted divider"></div>
+          <div class="">
+            {{this.translateService.translateLibrary.loginModal.forgotPswd}} <a href="#" (click)="openResetForm()">{{this.translateService.translateLibrary.loginModal.forgotPswdLink}}</a>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="fluid ui green button" *ngIf="!auth0.responseToForm">{{this.translateService.translateLibrary.loginModal.loginBtn}}</button>
+      <button class="ui loading fluid green button" *ngIf="auth0.responseToForm">Loading</button>
+
+    </form>
+
+    <!-- Login form -->
+
+    <!-- Login signup -->
+
+    <form class="ui form" id="signup_form"
+          (ngSubmit)="validateService.checkSignupForm(emailsignup.value, passwordsignup.value, passwordConfirmsignup.value, nicknamesignup.value)"
+          >
+
+      <div class="field fluid ui left icon input custom_input-login">
+        <input type="text" name="name" [disabled]="!validateService.busyNickname" #nicknamesignup
+               placeholder="{{this.translateService.translateLibrary.loginModal.placeholderNick}}">
+        <i class="user icon"></i>
+        <i class="checkmark icon checking_icon" [@scale] *ngIf="validateService.checkFormNickname(nicknamesignup.value)"></i>
+        <span class="busy_nickname" [@scale] *ngIf="validateService.nickIsBusy">
+          <i class="notched warning sign icon"></i>
+          {{this.translateService.translateLibrary.loginModal.nickBusy}}
+        </span>
+      </div>
+
+      <div class="field fluid ui left icon input custom_input-login">
+        <input type="text" name="name" #emailsignup
+               placeholder="{{this.translateService.translateLibrary.loginModal.placeholderEmail}}">
+        <i class="mail icon"></i>
+        <i class="checkmark icon checking_icon" [@scale] *ngIf="validateService.checkFormEmail(emailsignup.value)"></i>
+      </div>
+
+      <div class="two fields">
+        <div class="field fluid ui left icon input custom_input-login two_inputs">
+          <input type="password" #passwordsignup
+                 placeholder="{{this.translateService.translateLibrary.loginModal.placeholderPswd}}">
+          <i class="lock icon"></i>
+          <i class="checkmark icon checking_icon" [@scale] *ngIf="validateService.checkFormPass(passwordsignup.value)"></i>
+        </div>
+
+        <div class="field fluid ui left icon input custom_input-login two_inputs">
+          <input type="password" #passwordConfirmsignup
+                 placeholder="{{this.translateService.translateLibrary.loginModal.placeholderPswdConfirm}}">
+          <i class="lock icon"></i>
+          <i class="checkmark icon checking_icon" [@scale] *ngIf="validateService.checkSimilarPass(passwordsignup.value, passwordConfirmsignup.value)"></i>
+        </div>
+      </div>
+
+      <div class="ui negative icon message small custom_errors" [@scale] *ngIf="validateService.resultValidateForm.length">
+        <i class="notched warning sign icon"></i>
+        <div class="content">
+          <ul class="list">
+            <li *ngFor="let item of validateService.resultValidateForm">{{item}}</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="ui negative icon message small custom_errors" [@scale] *ngIf="auth0.validationFromAuth0">
+        <i class="notched warning sign icon"></i>
+        <div class="content">
+          {{auth0.validationFromAuth0}}
+        </div>
+      </div>
+
+      <button type="submit" class="fluid ui green button" *ngIf="!auth0.responseToForm">{{this.translateService.translateLibrary.loginModal.registerBtn}}</button>
+      <button class="ui loading fluid green button" *ngIf="auth0.responseToForm">Loading</button>
+
+    </form>
+
+    <!-- Login signup -->
+
+    <!-- Login reset password -->
+
+    <form class="ui form" id="reset_form" (ngSubmit)="validateService.checkResetForm(emailreset.value)">
+
+      <div class="field fluid ui left icon input custom_input-login">
+        <input type="text" name="name" #emailreset
+               placeholder="{{this.translateService.translateLibrary.loginModal.placeholderEmail}}">
+        <i class="mail icon"></i>
+        <i class="checkmark icon checking_icon" [@scale] *ngIf="validateService.checkFormEmail(emailreset.value)"></i>
+      </div>
+
+      <div class="ui negative icon message small custom_errors" [@scale] *ngIf="validateService.resultValidateForm.length">
+        <i class="notched warning sign icon"></i>
+        <div class="content">
+          <ul class="list">
+            <li *ngFor="let item of validateService.resultValidateForm">{{item}}</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="ui negative icon message small custom_errors" [@scale] *ngIf="auth0.validationFromAuth0">
+        <i class="notched warning sign icon"></i>
+        <div class="content">
+          {{auth0.validationFromAuth0}}
+        </div>
+      </div>
+
+      <div class="ui positive icon message small custom_errors" [@scale] *ngIf="validateService.resetPassSuccess">
+        <i class="notched check circle icon"></i>
+        <div class="content">
+          {{this.translateService.translateLibrary.loginModal.resetSuc}}
+        </div>
+      </div>
+
+      <button type="submit" *ngIf="!validateService.resetPassSuccess && !auth0.responseToForm" class="fluid ui green button ">{{this.translateService.translateLibrary.loginModal.resetBtn}}</button>
+      <button class="ui loading fluid green button" *ngIf="auth0.responseToForm">Loading</button>
+
+    </form>
+
+    <!-- Login reset password -->
+
+  </div>
+
+  <h4 class="ui horizontal inverted divider" style="margin-top: 0px;">
+     <i class="angle double down icon"></i>
+  </h4>
+
+  <!-- Footers for forms -->
+
+  <div class="signup_login-button" id="fFormSignup" >
+    {{this.translateService.translateLibrary.loginModal.newRegister}} <a href="#" (click)="openSignupForm()"> {{this.translateService.translateLibrary.loginModal.newRegisterLink}}</a>
+  </div>
+
+  <div class="signup_login-button" id="fFormLogin">
+    {{this.translateService.translateLibrary.loginModal.newLogin}} <a href="#" (click)="openLoginForm()">{{this.translateService.translateLibrary.loginModal.newLoginLink}}</a>
+  </div>
+
+  <div class="signup_login-button" id="fFormReset">
+    <a href="#" (click)="closeResetForm()"> {{this.translateService.translateLibrary.loginModal.login}}!</a>
+  </div>
+
+  <!-- Footers for forms -->
+
+</div>
+
+<!-- Modal login/signup/reset pass -->
+
+
+<div class="ui basic modal" id="modalAccount" *ngIf="accountUser">
+<!-- <span *ngIf="accountMarkers"  style="color: red">sdsd</span> -->
+
+  <div class="ui header custom_userProfile_head userProfile_head" >
+    <i class="linkify icon link-icon link-account"></i>
+    <i class="remove icon close-icon" (click)="closeAccountModal()"></i>
+
+    <div class="custom_userProfile-nick">
+      <div class="custom_userProfile-nick-inside">
+        {{accountUser.user_metadata.nickname}}
+      </div>
+    </div>
+  </div>
+
+  <div class="content custom_userProfile_body">
+
+    <div class="custom_userProfile-img"
+         [ngStyle]="{'background-image': 'url(' + sanitizeForAccount(accountUser.user_metadata.img) + ')'}">
+    </div>
+
+    <div id="marker_block-account">
+
+    <h3 class="markers_header">
+      {{this.translateService.translateLibrary.accountModal.userMrks}} {{accountUser.user_metadata.nickname}}
+    </h3>
+
+    <div class="ui two statistics custom_statistics">
+      <div class="statistic">
+        <div class="value" *ngIf="accountMarkers">
+          {{accountMarkers.length ? accountMarkers.length : '∞'}}
+        </div>
+        <div class="label">
+          {{this.translateService.translateLibrary.userModal.numberMrks}}
+        </div>
+      </div>
+      <div class="statistic">
+        <div class="text value custom_statistics_btn">
+          <button class="ui teal basic button"
+                  (click)="sendUserMarker(accountMarkers)"
+                  [disabled]="accountMarkers.length ? false : true">
+            {{this.translateService.translateLibrary.userModal.viewBtn}}
+          </button>
+        </div>
+        <div class="label">
+          {{this.translateService.translateLibrary.accountModal.onlyMrk}} <i class="view-map_italic"> {{ accountUser.user_metadata.nickname }} </i> {{this.translateService.translateLibrary.accountModal.onlyMrks}}
+        </div>
+      </div>
+    </div>
+
+    <div class="ui fluid icon input custom_input-markers">
+      <input type="text" [(ngModel)]="filterExpressionAccount" placeholder="{{this.translateService.translateLibrary.userModal.searchMrk}}">
+      <i class="search icon"></i>
+    </div>
+
+    <div class="ui segment custom_segment-markers" >
+
+      <div class="ui active dimmer" *ngIf="dimmerAccountMarkers">
+        <div class="ui loader"></div>
+      </div>
+
+      <div class="not_markers" *ngIf="notHaveAccountMarkers">
+        {{this.translateService.translateLibrary.accountModal.notMrks}}
+      </div>
+
+       <div class="ui styled fluid accordion" id="marker_accordion">
+
+        <span class="divide_accordion-item" style="display: block;"
+              [@fadeInOut]
+              *ngFor="let marker of accountMarkers | filterMarkersProfile:filterExpressionAccount">
+          <div class="title">
+            <a class="ui label custom_icon-marker" (click)="openUserMarker(marker._id.$oid)">
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	              viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+                <g>
+                	<path d="M256,0C167.641,0,96,71.625,96,160c0,24.75,5.625,48.219,15.672,69.125C112.234,230.313,256,512,256,512l142.594-279.375
+                		C409.719,210.844,416,186.156,416,160C416,71.625,344.375,0,256,0z M256,256c-53.016,0-96-43-96-96s42.984-96,96-96
+                		c53,0,96,43,96,96S309,256,256,256z"/>
+                </g>
+              </svg>
+            </a>
+            <i class="dropdown icon custom_icon-dropdown"> </i>
+
+            <span class="custom_title_name">{{marker.name}}</span>
+            <span class="custom_title_comment">{{marker.comment}} </span>
+
+            <button class="ui basic icon button custom_title_linkbtn btn"
+                    [attr.data-tooltip]="this.translateService.translateLibrary.validate.copyLinkBtn"
+                    [attr.data-position]="'left center'"
+                    [attr.data-clipboard-text]="'https://antsgeo.github.io/?id='+marker._id.$oid">
+              <i class="linkify icon"></i>
+            </button>
+
+          </div>
+          <div class="content">
+            <div class="header">
+              {{this.translateService.translateLibrary.accountModal.infoMrk}} <i class="icon info circle custom_label-icon"></i>
+            </div>
+
+            <div class="marker-account_info">
+              <div class="ui label custom_label-title">
+                {{this.translateService.translateLibrary.userModal.nameMrk}}:
+              </div>
+              <div class="ui basic label custom_label-text">{{marker.name}} </div>
+            </div>
+
+            <div class="marker-account_info">
+              <div class="ui label custom_label-title">
+                {{this.translateService.translateLibrary.userModal.commentMrk}}:
+              </div>
+              <div class="ui basic label custom_label-text">{{marker.comment}} </div>
+            </div>
+
+          </div>
+        </span>
+      </div>
+    </div>
+
+  </div>
+
+ </div>
+</div>
